@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { logActivity } from '../../store/activitySlice';
 import { ActivityRequest } from '../../types';
-import Button from '../ui/Button';
 import styles from '../Dashboard/Dashboard.module.css';
 
 interface ActivityFormProps {

@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL?.trim() || 'http://localhost:8080/api';
+const API_URL = process.env.REACT_APP_API_URL?.trim() || "https://focusforge-backend.onrender.com";
 const AUTH_ROUTES = new Set(['/login', '/register', '/forgot-password']);
 
 type QueryValue = string | number | boolean | undefined | null;
