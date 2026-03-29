@@ -1,6 +1,20 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL?.trim() || "https://focusforge-backend.onrender.com";
+const DEFAULT_API_URL = 'https://focusforge-backend.onrender.com/api';
+
+const normalizeApiUrl = (rawUrl?: string): string => {
+  const candidate = rawUrl?.trim();
+  if (!candidate) {
+    return DEFAULT_API_URL;
+  }
+
+  const withoutTrailingSlash = candidate.replace(/\/+$/, '');
+  return withoutTrailingSlash.endsWith('/api')
+    ? withoutTrailingSlash
+    : `${withoutTrailingSlash}/api`;
+};
+
+const API_URL = normalizeApiUrl(process.env.REACT_APP_API_URL);
 const AUTH_ROUTES = new Set(['/login', '/register', '/forgot-password']);
 
 type QueryValue = string | number | boolean | undefined | null;
