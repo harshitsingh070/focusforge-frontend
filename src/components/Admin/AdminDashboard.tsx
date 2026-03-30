@@ -82,6 +82,71 @@ interface RecentActivityRow {
   minutesSpent: number;
 }
 
+interface FunnelStageRow {
+  stage: string;
+  users: number;
+  conversionFromPrevious: number;
+  dropOffFromPrevious: number;
+}
+
+interface RetentionOverallRow {
+  day1Rate: number;
+  day7Rate: number;
+  day30Rate: number;
+  eligibleDay1Users: number;
+  eligibleDay7Users: number;
+  eligibleDay30Users: number;
+}
+
+interface RetentionCohortRow {
+  cohortStart: string;
+  users: number;
+  day1Rate: number;
+  day7Rate: number;
+  day30Rate: number;
+}
+
+interface RetentionMetricsData {
+  overall: RetentionOverallRow;
+  cohorts: RetentionCohortRow[];
+}
+
+interface LifecycleStateRow {
+  state: string;
+  users: number;
+  percentage: number;
+}
+
+interface FeatureUsageRow {
+  feature: string;
+  users: number;
+  adoptionRate: number;
+  totalEvents: number;
+  eventsLast7Days: number;
+  avgEventsPerActiveUser: number;
+}
+
+interface FunnelDropOffRow {
+  fromStage: string;
+  toStage: string;
+  usersLost: number;
+  dropOffRate: number;
+}
+
+interface InactivityBucketRow {
+  bucket: string;
+  users: number;
+}
+
+interface DropOffAnalyticsData {
+  usersWithoutGoals: number;
+  usersWithGoalsNoActivity: number;
+  abandonedActiveGoals: number;
+  funnelDropOff: FunnelDropOffRow[];
+  largestDropOff: FunnelDropOffRow | null;
+  inactivityBuckets: InactivityBucketRow[];
+}
+
 interface AdminOverviewResponse {
   generatedAt: string;
   adminEmail: string;
@@ -90,6 +155,11 @@ interface AdminOverviewResponse {
   topUsers: TopUserRow[];
   users: AdminUserRow[];
   recentActivity: RecentActivityRow[];
+  funnelTracking: FunnelStageRow[];
+  retentionMetrics: RetentionMetricsData;
+  userLifecycleStates: LifecycleStateRow[];
+  featureUsageTracking: FeatureUsageRow[];
+  dropOffAnalytics: DropOffAnalyticsData;
 }
 
 const CHART_COLORS = ['#0f766e', '#ea580c', '#2563eb', '#16a34a', '#be185d', '#0ea5e9'];
@@ -102,6 +172,8 @@ const formatShortDate = (value: string): string => {
     ? value
     : date.toLocaleDateString([], { month: 'short', day: 'numeric' });
 };
+
+const formatPercent = (value: number | null | undefined): string => `${(value ?? 0).toFixed(1)}%`;
 
 const AdminDashboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -211,6 +283,29 @@ const AdminDashboard: React.FC = () => {
       .sort((left, right) => right.activities - left.activities)
       .slice(0, 8);
   }, [data]);
+
+  const funnelChartData = useMemo(
+    () =>
+      (data?.funnelTracking || []).map((row) => ({
+        ...row,
+        shortStage: row.stage.length > 22 ? `${row.stage.slice(0, 22)}...` : row.stage,
+      })),
+    [data]
+  );
+
+  const lifecycleChartData = useMemo(
+    () =>
+      (data?.userLifecycleStates || []).map((row) => ({
+        ...row,
+        label: row.state.length > 14 ? `${row.state.slice(0, 14)}...` : row.state,
+      })),
+    [data]
+  );
+
+  const featureUsageData = useMemo(() => data?.featureUsageTracking || [], [data]);
+  const inactivityBucketData = useMemo(() => data?.dropOffAnalytics?.inactivityBuckets || [], [data]);
+  const retentionOverall = data?.retentionMetrics?.overall;
+  const retentionCohorts = data?.retentionMetrics?.cohorts || [];
 
   const renderHeader = (title: string, subtitle?: string) => (
     <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
@@ -339,6 +434,85 @@ const AdminDashboard: React.FC = () => {
             <p className="mt-1 text-xs text-ink-muted">
               {data.summary.uniqueUsersLast7Days.toLocaleString()} unique active users
             </p>
+          </article>
+        </section>
+
+        <section className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+          <article className="card">
+            <p className="text-sm text-ink-muted">Retention D1</p>
+            <p className="mt-2 text-3xl font-black text-emerald-700">{formatPercent(retentionOverall?.day1Rate)}</p>
+            <p className="mt-1 text-xs text-ink-muted">
+              {(retentionOverall?.eligibleDay1Users ?? 0).toLocaleString()} eligible users
+            </p>
+          </article>
+
+          <article className="card">
+            <p className="text-sm text-ink-muted">Retention D7</p>
+            <p className="mt-2 text-3xl font-black text-teal-700">{formatPercent(retentionOverall?.day7Rate)}</p>
+            <p className="mt-1 text-xs text-ink-muted">
+              {(retentionOverall?.eligibleDay7Users ?? 0).toLocaleString()} eligible users
+            </p>
+          </article>
+
+          <article className="card">
+            <p className="text-sm text-ink-muted">Retention D30</p>
+            <p className="mt-2 text-3xl font-black text-cyan-700">{formatPercent(retentionOverall?.day30Rate)}</p>
+            <p className="mt-1 text-xs text-ink-muted">
+              {(retentionOverall?.eligibleDay30Users ?? 0).toLocaleString()} eligible users
+            </p>
+          </article>
+
+          <article className="card">
+            <p className="text-sm text-ink-muted">Users Without Goals</p>
+            <p className="mt-2 text-3xl font-black text-amber-700">
+              {(data?.dropOffAnalytics?.usersWithoutGoals ?? 0).toLocaleString()}
+            </p>
+            <p className="mt-1 text-xs text-ink-muted">Primary onboarding drop-off bucket</p>
+          </article>
+
+          <article className="card">
+            <p className="text-sm text-ink-muted">Abandoned Active Goals</p>
+            <p className="mt-2 text-3xl font-black text-rose-700">
+              {(data?.dropOffAnalytics?.abandonedActiveGoals ?? 0).toLocaleString()}
+            </p>
+            <p className="mt-1 text-xs text-ink-muted">No activity in the last 14 days</p>
+          </article>
+        </section>
+
+        <section className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <article className="card">
+            <h2 className="font-display text-xl font-bold text-gray-900">Funnel Tracking</h2>
+            <p className="mt-1 text-sm text-ink-muted">Live conversion across activation milestones.</p>
+            <div className="mt-4 h-[320px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={funnelChartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartGridStroke} />
+                  <XAxis dataKey="shortStage" tick={{ fill: axisStroke, fontSize: 11 }} />
+                  <YAxis tick={{ fill: axisStroke, fontSize: 11 }} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="users" fill="#0f766e" name="Users" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </article>
+
+          <article className="card">
+            <h2 className="font-display text-xl font-bold text-gray-900">User Lifecycle States</h2>
+            <p className="mt-1 text-sm text-ink-muted">Current distribution across lifecycle health buckets.</p>
+            <div className="mt-4 h-[320px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={lifecycleChartData} dataKey="users" nameKey="state" outerRadius={100} label>
+                    {lifecycleChartData.map((entry, index) => (
+                      <Cell key={`${entry.state}-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </article>
         </section>
 
@@ -487,6 +661,148 @@ const AdminDashboard: React.FC = () => {
               </tbody>
             </table>
           </div>
+        </section>
+
+        <section className="card mb-8">
+          <h2 className="font-display text-xl font-bold text-gray-900">Feature Usage Tracking</h2>
+          <p className="mt-1 text-sm text-ink-muted">Real usage and adoption levels for core product features.</p>
+          <div className="scrollbar-soft mt-4 overflow-x-auto">
+            <table className="data-table min-w-[980px]">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th className="text-right">Users</th>
+                  <th className="text-right">Adoption</th>
+                  <th className="text-right">Total Events</th>
+                  <th className="text-right">Events (7d)</th>
+                  <th className="text-right">Avg / Active User</th>
+                </tr>
+              </thead>
+              <tbody>
+                {featureUsageData.map((item) => (
+                  <tr key={item.feature}>
+                    <td className="font-semibold text-gray-900">{item.feature}</td>
+                    <td className="text-right">{item.users.toLocaleString()}</td>
+                    <td className="text-right">{formatPercent(item.adoptionRate)}</td>
+                    <td className="text-right">{item.totalEvents.toLocaleString()}</td>
+                    <td className="text-right">{item.eventsLast7Days.toLocaleString()}</td>
+                    <td className="text-right">{item.avgEventsPerActiveUser.toFixed(2)}</td>
+                  </tr>
+                ))}
+                {featureUsageData.length === 0 && (
+                  <tr>
+                    <td colSpan={6} className="text-center text-ink-muted">
+                      No feature usage data available.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-2">
+          <article className="card">
+            <h2 className="font-display text-xl font-bold text-gray-900">Retention Cohorts</h2>
+            <p className="mt-1 text-sm text-ink-muted">Rolling retention rates by signup week cohort.</p>
+            <div className="scrollbar-soft mt-4 overflow-x-auto">
+              <table className="data-table min-w-[760px]">
+                <thead>
+                  <tr>
+                    <th>Cohort Week</th>
+                    <th className="text-right">Users</th>
+                    <th className="text-right">D1</th>
+                    <th className="text-right">D7</th>
+                    <th className="text-right">D30</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {retentionCohorts.map((row) => (
+                    <tr key={row.cohortStart}>
+                      <td>{row.cohortStart}</td>
+                      <td className="text-right">{row.users.toLocaleString()}</td>
+                      <td className="text-right">{formatPercent(row.day1Rate)}</td>
+                      <td className="text-right">{formatPercent(row.day7Rate)}</td>
+                      <td className="text-right">{formatPercent(row.day30Rate)}</td>
+                    </tr>
+                  ))}
+                  {retentionCohorts.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="text-center text-ink-muted">
+                        No retention cohort rows available.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <article className="card">
+            <h2 className="font-display text-xl font-bold text-gray-900">Drop-off Analytics</h2>
+            <p className="mt-1 text-sm text-ink-muted">Where users and goals are currently dropping off.</p>
+            <div className="mt-4 space-y-3">
+              <p className="text-sm text-ink-muted">
+                Users with goals but no activity:{' '}
+                <span className="font-semibold text-gray-900">
+                  {(data?.dropOffAnalytics?.usersWithGoalsNoActivity ?? 0).toLocaleString()}
+                </span>
+              </p>
+              {data?.dropOffAnalytics?.largestDropOff && (
+                <p className="text-sm text-ink-muted">
+                  Largest stage drop: <span className="font-semibold text-gray-900">
+                    {data.dropOffAnalytics.largestDropOff.fromStage}
+                  </span>{' '}
+                  to{' '}
+                  <span className="font-semibold text-gray-900">
+                    {data.dropOffAnalytics.largestDropOff.toStage}
+                  </span>{' '}
+                  ({formatPercent(data.dropOffAnalytics.largestDropOff.dropOffRate)} drop)
+                </p>
+              )}
+            </div>
+            <div className="mt-4 h-[250px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={inactivityBucketData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartGridStroke} />
+                  <XAxis dataKey="bucket" tick={{ fill: axisStroke, fontSize: 11 }} />
+                  <YAxis tick={{ fill: axisStroke, fontSize: 11 }} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="users" fill="#ea580c" name="Users" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="scrollbar-soft mt-4 overflow-x-auto">
+              <table className="data-table min-w-[720px]">
+                <thead>
+                  <tr>
+                    <th>From Stage</th>
+                    <th>To Stage</th>
+                    <th className="text-right">Users Lost</th>
+                    <th className="text-right">Drop-off</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(data?.dropOffAnalytics?.funnelDropOff ?? []).map((row) => (
+                    <tr key={`${row.fromStage}-${row.toStage}`}>
+                      <td>{row.fromStage}</td>
+                      <td>{row.toStage}</td>
+                      <td className="text-right">{row.usersLost.toLocaleString()}</td>
+                      <td className="text-right">{formatPercent(row.dropOffRate)}</td>
+                    </tr>
+                  ))}
+                  {(!data?.dropOffAnalytics?.funnelDropOff || data.dropOffAnalytics.funnelDropOff.length === 0) && (
+                    <tr>
+                      <td colSpan={4} className="text-center text-ink-muted">
+                        No funnel drop-off rows available.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </article>
         </section>
 
         <section className="card mb-8">
