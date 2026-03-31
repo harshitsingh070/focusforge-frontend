@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import CircularLogo from '../ui/CircularLogo';
 
 const currentYear = new Date().getFullYear();
 
@@ -63,11 +64,9 @@ const LandingPage: React.FC = () => {
       {/* ── Navigation ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-4 sm:px-8">
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 shadow-lg shadow-violet-500/30">
-              <span className="text-xs font-bold text-white">FF</span>
-            </div>
-            <span className="text-base font-bold text-white">FocusForge</span>
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <CircularLogo size="md" />
+            <span className="text-base font-bold text-white">Discipify</span>
           </Link>
 
           <div className="flex items-center gap-3">
@@ -98,21 +97,21 @@ const LandingPage: React.FC = () => {
           <div className="relative z-10 mx-auto max-w-[1280px] px-4 sm:px-8 py-20 text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm font-medium text-violet-400 mb-8">
               <span className="h-2 w-2 rounded-full bg-violet-400 animate-pulse" />
-              Goal tracking, reimagined
+              Gamify your discipline
             </div>
 
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.1] tracking-tight mb-6">
-              Build habits that{' '}
+              Turn your discipline{' '}
               <span className="relative">
                 <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
-                  actually stick
+                  into a game
                 </span>
               </span>
             </h1>
 
             <p className="mx-auto max-w-2xl text-xl text-slate-400 leading-relaxed mb-10">
-              Track daily effort, protect your streaks, and compete on transparent leaderboards.
-              FocusForge is the productivity platform built for people who execute every day.
+              Track habits, earn XP, build streaks & compete on leaderboards.
+              Discipify turns your discipline into an engaging game where every day counts.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
@@ -272,13 +271,11 @@ const LandingPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pb-8 border-b border-white/5">
             <div>
               <div className="flex items-center gap-2.5 mb-4">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600">
-                  <span className="text-xs font-bold text-white">FF</span>
-                </div>
-                <span className="text-base font-bold text-white">FocusForge</span>
+                <CircularLogo size="md" />
+                <span className="text-base font-bold text-white">Discipify</span>
               </div>
               <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
-                Goal tracking and consistency intelligence for people who execute every day.
+                Gamify your discipline. Track habits, earn XP, build streaks, and climb the leaderboards.
               </p>
             </div>
 
@@ -301,7 +298,7 @@ const LandingPage: React.FC = () => {
           </div>
 
           <div className="pt-8 text-center">
-            <p className="text-xs text-slate-600">© {currentYear} FocusForge. Build habits one day at a time.</p>
+            <p className="text-xs text-slate-600">© {currentYear} Discipify. Gamify your discipline.</p>
           </div>
         </div>
       </footer>

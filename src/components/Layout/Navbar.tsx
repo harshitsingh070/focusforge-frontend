@@ -6,6 +6,7 @@ import { logout } from '../../store/authSlice';
 import { isAdminEmail } from '../../constants/admin';
 import { NAV_ITEMS, ADMIN_NAV_ITEM, isActiveNav } from '../../constants/navigation';
 import { useTheme } from '../../contexts/ThemeContext';
+import CircularLogo from '../ui/CircularLogo';
 
 interface NavbarProps {
   onToggleMobileSidebar?: () => void;
@@ -76,11 +77,9 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
             to={isAuthenticated ? '/dashboard' : '/'}
             className={`items-center gap-2.5 group ${showDesktopBrand ? 'flex' : 'flex md:hidden'}`}
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-purple-500 text-sm font-bold text-white shadow-lg shadow-violet-500/30 transition-transform duration-300 group-hover:scale-105">
-              FF
-            </div>
+            <CircularLogo size="md" />
             <span className="hidden text-lg font-bold tracking-tight text-slate-900 dark:text-white sm:block">
-              FocusForge
+              Discipify
             </span>
           </Link>
         </div>
@@ -152,8 +151,8 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
             </span>
           </button>
 
-          {/* User pill & Logout — desktop */}
-          {isAuthenticated ? (
+          {/* User pill & Logout — desktop (hidden on admin routes) */}
+          {isAuthenticated && !location.pathname.startsWith('/admin') ? (
             <>
               <div className="hidden items-center gap-2.5 rounded-full bg-slate-100 dark:bg-slate-800/60 p-1.5 pr-4 border border-slate-200/80 dark:border-slate-700/50 sm:flex">
                 <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-600 text-[11px] font-bold text-white shadow-sm">
@@ -171,6 +170,16 @@ const Navbar: React.FC<NavbarProps> = ({ onToggleMobileSidebar }) => {
                 Logout
               </button>
             </>
+          ) : isAuthenticated && location.pathname.startsWith('/admin') ? (
+            // Admin navbar — minimal, logout is in sidebar
+            <div className="hidden items-center gap-2.5 rounded-full bg-slate-100/50 dark:bg-slate-800/30 p-1.5 pr-4 border border-slate-200/60 dark:border-slate-700/30 sm:flex">
+              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-600 text-[11px] font-bold text-white shadow-sm">
+                {initials}
+              </div>
+              <span className="max-w-[120px] truncate text-sm font-medium text-slate-700 dark:text-slate-200">
+                {displayName}
+              </span>
+            </div>
           ) : (
             <button
               type="button"

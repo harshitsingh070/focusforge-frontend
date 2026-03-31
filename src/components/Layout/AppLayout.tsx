@@ -6,6 +6,8 @@ import { isAdminEmail } from '../../constants/admin';
 import { NAV_ITEMS, ADMIN_NAV_ITEM, isActiveNav } from '../../constants/navigation';
 import { GoalComposerProvider } from '../../contexts/GoalComposerContext';
 import Navbar from './Navbar';
+import AdminSidebar from './AdminSidebar';
+import CircularLogo from '../ui/CircularLogo';
 import PageReveal from '../ui/PageReveal';
 
 const SIDEBAR_COLLAPSED_KEY = 'ff-sidebar-collapsed';
@@ -59,103 +61,111 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         style={layoutStyle}
       >
         <div className="flex h-screen">
-        {/* ── Desktop Sidebar — full height, sits at the left ── */}
-        <aside
-          className={`
-            hidden md:flex flex-col justify-between shrink-0
-            h-screen sticky top-0 z-50
-            border-r border-slate-200/80 dark:border-slate-800
-            bg-white dark:bg-slate-900
-            transition-all duration-300 ease-out
-            ${collapsed ? 'w-[72px]' : 'w-[260px]'}
-          `}
-        >
-          {/* Logo area — matches Navbar height */}
-          <div className="flex h-[72px] shrink-0 items-center border-b border-slate-200/80 dark:border-slate-800 px-4">
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="flex items-center gap-2.5 group"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-purple-500 text-sm font-bold text-white shadow-lg shadow-violet-500/30 transition-transform duration-300 group-hover:scale-105">
-                FF
-              </div>
-              {!collapsed && (
-                <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-                  FocusForge
-                </span>
-              )}
-            </button>
-          </div>
-
-          {/* Nav items */}
-          <div className="flex-1 flex flex-col gap-1 p-3 pt-4 overflow-y-auto overflow-x-hidden">
-            {navItems.map((item) => {
-              const active = isActiveNav(location.pathname, item.to);
-              return (
-                <button
-                  key={item.to}
-                  type="button"
-                  onClick={() => navigate(item.to)}
-                  title={collapsed ? item.label : undefined}
-                  className={`
-                    group relative flex items-center gap-3 rounded-xl px-3 py-2.5
-                    text-left transition-all duration-200
-                    ${collapsed ? 'justify-center' : ''}
-                    ${active
-                      ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25'
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
-                    }
-                  `}
-                >
-                  <span className="material-symbols-outlined text-[20px] shrink-0">{item.icon}</span>
-                  {!collapsed && (
-                    <span className={`text-sm whitespace-nowrap ${active ? 'font-semibold' : 'font-medium'}`}>
-                      {item.label}
-                    </span>
-                  )}
-                  {/* Tooltip for collapsed mode */}
-                  {collapsed && (
-                    <span className="absolute left-full ml-2 hidden group-hover:flex items-center rounded-lg bg-slate-900 dark:bg-slate-700 px-2.5 py-1.5 text-xs font-medium text-white shadow-lg z-[60] whitespace-nowrap">
-                      {item.label}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Bottom section */}
-          <div className="border-t border-slate-200/80 dark:border-slate-800 p-3">
-            {/* Collapse toggle */}
-            <button
-              onClick={toggleCollapsed}
-              className="flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors"
-              aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              <span
-                className="material-symbols-outlined text-[20px] transition-transform duration-300"
-                style={{ transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)' }}
+        {/* ── Desktop Sidebar — show AdminSidebar for /admin routes ── */}
+        {location.pathname.startsWith('/admin') ? (
+          <AdminSidebar
+            collapsed={collapsed}
+            onToggleCollapsed={toggleCollapsed}
+            displayName={displayName}
+            initials={initials}
+          />
+        ) : (
+          // Regular sidebar for non-admin pages
+          <aside
+            className={`
+              hidden md:flex flex-col justify-between shrink-0
+              h-screen sticky top-0 z-50
+              border-r border-slate-200/80 dark:border-slate-800
+              bg-white dark:bg-slate-900
+              transition-all duration-300 ease-out
+              ${collapsed ? 'w-[72px]' : 'w-[260px]'}
+            `}
+          >
+            {/* Logo area — matches Navbar height */}
+            <div className="flex h-[72px] shrink-0 items-center border-b border-slate-200/80 dark:border-slate-800 px-4 gap-2.5">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="flex items-center gap-2.5 group w-full min-w-0"
               >
-                chevron_left
-              </span>
-              {!collapsed && <span>Collapse</span>}
-            </button>
+                <CircularLogo size="md" />
+                {!collapsed && (
+                  <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+                    Discipify
+                  </span>
+                )}
+              </button>
+            </div>
 
-            {/* User card */}
-            {!collapsed && (
-              <div className="mt-2 flex items-center gap-3 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 px-3 py-3">
-                <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-600 text-xs font-bold text-white shadow-sm">
-                  {initials}
-                  <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white dark:border-slate-800 bg-emerald-500" />
+            {/* Nav items */}
+            <div className="flex-1 flex flex-col gap-1 p-3 pt-4 overflow-y-auto overflow-x-hidden">
+              {navItems.map((item) => {
+                const active = isActiveNav(location.pathname, item.to);
+                return (
+                  <button
+                    key={item.to}
+                    type="button"
+                    onClick={() => navigate(item.to)}
+                    title={collapsed ? item.label : undefined}
+                    className={`
+                      group relative flex items-center gap-3 rounded-xl px-3 py-2.5
+                      text-left transition-all duration-200
+                      ${collapsed ? 'justify-center' : ''}
+                      ${active
+                        ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25'
+                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                      }
+                    `}
+                  >
+                    <span className="material-symbols-outlined text-[20px] shrink-0">{item.icon}</span>
+                    {!collapsed && (
+                      <span className={`text-sm whitespace-nowrap ${active ? 'font-semibold' : 'font-medium'}`}>
+                        {item.label}
+                      </span>
+                    )}
+                    {/* Tooltip for collapsed mode */}
+                    {collapsed && (
+                      <span className="absolute left-full ml-2 hidden group-hover:flex items-center rounded-lg bg-slate-900 dark:bg-slate-700 px-2.5 py-1.5 text-xs font-medium text-white shadow-lg z-[60] whitespace-nowrap">
+                        {item.label}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Bottom section */}
+            <div className="border-t border-slate-200/80 dark:border-slate-800 p-3">
+              {/* Collapse toggle */}
+              <button
+                onClick={toggleCollapsed}
+                className="flex w-full items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors"
+                aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              >
+                <span
+                  className="material-symbols-outlined text-[20px] transition-transform duration-300"
+                  style={{ transform: collapsed ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                >
+                  chevron_left
+                </span>
+                {!collapsed && <span>Collapse</span>}
+              </button>
+
+              {/* User card */}
+              {!collapsed && (
+                <div className="mt-2 flex items-center gap-3 rounded-xl border border-slate-200/80 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 px-3 py-3">
+                  <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-600 text-xs font-bold text-white shadow-sm">
+                    {initials}
+                    <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white dark:border-slate-800 bg-emerald-500" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{displayName}</p>
+                    <p className="truncate text-xs text-slate-500 dark:text-slate-400">Pro Member</p>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{displayName}</p>
-                  <p className="truncate text-xs text-slate-500 dark:text-slate-400">Pro Member</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </aside>
+              )}
+            </div>
+          </aside>
+        )}
 
         {/* ── Mobile Sidebar Overlay ── */}
         {mobileOpen && (
