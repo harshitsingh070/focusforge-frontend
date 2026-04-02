@@ -64,7 +64,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <GoalComposerProvider>
       <div
-        className="min-h-screen min-h-[100dvh] overflow-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 [font-family:'Inter',sans-serif]"
+        className="min-h-screen min-h-[100dvh] overflow-x-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 lg:overflow-hidden [font-family:'Inter',sans-serif]"
         style={layoutStyle}
       >
         <div className="flex min-h-screen min-h-[100dvh]">
@@ -227,7 +227,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         )}
 
         {/* ── Right column: Navbar + Main Content ── */}
-        <div className="flex min-h-0 flex-1 flex-col lg:h-[100dvh]">
+        <div className="flex min-h-screen min-h-[100dvh] min-w-0 flex-1 flex-col lg:h-[100dvh]">
           {/* Navbar sits at the top of the right column */}
           <div className="shrink-0">
             <Navbar onToggleMobileSidebar={() => setMobileOpen((p) => !p)} />
@@ -235,7 +235,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
           {/* Main content scrolls independently — smooth scroll + overscroll containment */}
           <main
-            className="flex-1 overflow-y-auto scroll-smooth overscroll-contain"
+            className="flex-1 scroll-smooth lg:overflow-y-auto lg:overscroll-contain"
             style={{ scrollBehavior: 'smooth', willChange: 'scroll-position' }}
           >
             <PageReveal>{children}</PageReveal>
