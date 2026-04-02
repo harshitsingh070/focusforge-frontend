@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store';
 import { isAdminEmail } from '../../constants/admin';
 import { NAV_ITEMS, ADMIN_NAV_ITEM, isActiveNav } from '../../constants/navigation';
 import { GoalComposerProvider } from '../../contexts/GoalComposerContext';
@@ -9,10 +9,12 @@ import Navbar from './Navbar';
 import AdminSidebar from './AdminSidebar';
 import CircularLogo from '../ui/CircularLogo';
 import PageReveal from '../ui/PageReveal';
+import { logout } from '../../store/authSlice';
 
 const SIDEBAR_COLLAPSED_KEY = 'ff-sidebar-collapsed';
 
 const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -32,6 +34,11 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       return next;
     });
   }, []);
+
+  const handleMobileLogout = useCallback(() => {
+    dispatch(logout());
+    navigate('/login');
+  }, [dispatch, navigate]);
 
   // Close mobile sidebar on route change
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -57,10 +64,10 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <GoalComposerProvider>
       <div
-        className="h-screen overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 [font-family:'Inter',sans-serif]"
+        className="min-h-screen min-h-[100dvh] overflow-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 [font-family:'Inter',sans-serif]"
         style={layoutStyle}
       >
-        <div className="flex h-screen">
+        <div className="flex min-h-screen min-h-[100dvh]">
         {/* ── Desktop Sidebar — show AdminSidebar for /admin routes ── */}
         {location.pathname.startsWith('/admin') ? (
           <AdminSidebar
@@ -73,8 +80,8 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           // Regular sidebar for non-admin pages
           <aside
             className={`
-              hidden md:flex flex-col justify-between shrink-0
-              h-screen sticky top-0 z-50
+              hidden lg:flex flex-col justify-between shrink-0
+              lg:h-[100dvh] lg:sticky lg:top-0 z-50
               border-r border-slate-200/80 dark:border-slate-800
               bg-white dark:bg-slate-900
               transition-all duration-300 ease-out
@@ -169,12 +176,12 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
         {/* ── Mobile Sidebar Overlay ── */}
         {mobileOpen && (
-          <div className="fixed inset-0 z-[60] md:hidden">
+          <div className="fixed inset-0 z-[60] lg:hidden">
             <div
               className="absolute inset-0 bg-black/40 backdrop-blur-sm"
               onClick={() => setMobileOpen(false)}
             />
-            <aside className="absolute left-0 top-0 bottom-0 w-[280px] border-r border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 pt-20 animate-[ff-sheet-enter_220ms_ease_both] overflow-y-auto">
+            <aside className="absolute left-0 top-0 bottom-0 w-full max-w-[20rem] border-r border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 pt-20 animate-[ff-sheet-enter_220ms_ease_both] overflow-y-auto">
               {navItems.map((item) => {
                 const active = isActiveNav(location.pathname, item.to);
                 return (
@@ -207,12 +214,20 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   <p className="truncate text-xs text-slate-500 dark:text-slate-400">Pro Member</p>
                 </div>
               </div>
+              <button
+                type="button"
+                onClick={handleMobileLogout}
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-3 py-2.5 text-sm font-semibold text-white shadow-md shadow-violet-500/20"
+              >
+                <span className="material-symbols-outlined text-[18px]">logout</span>
+                Logout
+              </button>
             </aside>
           </div>
         )}
 
         {/* ── Right column: Navbar + Main Content ── */}
-        <div className="flex-1 flex flex-col min-w-0 h-screen">
+        <div className="flex min-h-0 flex-1 flex-col lg:h-[100dvh]">
           {/* Navbar sits at the top of the right column */}
           <div className="shrink-0">
             <Navbar onToggleMobileSidebar={() => setMobileOpen((p) => !p)} />

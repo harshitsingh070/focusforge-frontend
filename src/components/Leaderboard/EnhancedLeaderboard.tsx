@@ -383,7 +383,7 @@ const EnhancedLeaderboard: React.FC = () => {
                 )}
               </div>
 
-              <div className={`mt-4 flex items-center justify-between rounded-xl border border-[var(--ff-dashboard-card-border,var(--ff-border))] px-3 py-2.5 text-sm`}
+              <div className={`mt-4 flex flex-col items-start gap-2 rounded-xl border border-[var(--ff-dashboard-card-border,var(--ff-border))] px-3 py-2.5 text-sm sm:flex-row sm:items-center sm:justify-between`}
                 style={{ background: 'var(--ff-dashboard-card-bottom, var(--ff-surface-soft))' }}>
                 <span className={styles.dashboardGoalMeta}>Next rank up</span>
                 <span className="font-bold" style={{ color: '#a78bfa' }}>
@@ -399,7 +399,7 @@ const EnhancedLeaderboard: React.FC = () => {
               <h3 className={`text-lg font-black ${styles.dashboardGoalTitle}`}>Badges</h3>
               <span className={`text-xs font-semibold ${styles.dashboardGoalMeta}`}>Status</span>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {statusBadges.map((badge) => (
                 <div
                   key={badge.id}

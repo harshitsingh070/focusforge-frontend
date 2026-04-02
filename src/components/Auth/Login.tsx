@@ -42,7 +42,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
+    <div className="flex min-h-screen min-h-[100dvh] bg-slate-50 dark:bg-slate-950">
 
       {/* ── Left panel: ambient visual ── */}
       <div className="hidden lg:flex lg:w-[52%] relative overflow-hidden bg-gradient-to-br from-slate-900 via-violet-950 to-slate-900 flex-col">
@@ -113,7 +113,7 @@ const Login: React.FC = () => {
       </div>
 
       {/* ── Right panel: sign-in form ── */}
-      <div className="flex flex-1 items-center justify-center p-8 lg:p-12">
+      <div className="flex flex-1 items-start justify-center p-5 py-8 sm:p-8 sm:py-10 lg:items-center lg:p-12">
         <div className="w-full max-w-md">
 
           {/* Mobile logo */}

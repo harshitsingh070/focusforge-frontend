@@ -62,7 +62,7 @@ const Register: React.FC = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-8">
+      <div className="flex min-h-screen min-h-[100dvh] items-center justify-center bg-slate-50 p-4 dark:bg-slate-950 sm:p-8">
         <div className="w-full max-w-md text-center space-y-4">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-100 dark:bg-emerald-500/20">
             <svg className="h-8 w-8 text-emerald-600 dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -80,7 +80,7 @@ const Register: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950">
+    <div className="flex min-h-screen min-h-[100dvh] bg-slate-50 dark:bg-slate-950">
 
       {/* ── Left ambient panel ── */}
       <div className="hidden lg:flex lg:w-[48%] relative overflow-hidden bg-gradient-to-br from-slate-900 via-violet-950 to-slate-900 flex-col p-12">
@@ -121,7 +121,7 @@ const Register: React.FC = () => {
       </div>
 
       {/* ── Right form panel ── */}
-      <div className="flex flex-1 items-center justify-center p-8 lg:p-12">
+      <div className="flex flex-1 items-start justify-center p-5 py-8 sm:p-8 sm:py-10 lg:items-center lg:p-12">
         <div className="w-full max-w-md">
 
           {/* Mobile logo */}

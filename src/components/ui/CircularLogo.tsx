@@ -26,7 +26,7 @@ const CircularLogo: React.FC<CircularLogoProps> = ({
       `}
     >
       <img
-        src="/Main logo no text.png"
+        src="/logo-no-bg.png"
         alt="Discipify"
         className="h-full w-full object-cover rounded-full"
       />

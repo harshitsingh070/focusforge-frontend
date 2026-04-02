@@ -104,7 +104,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ entries, highlighte
 
   return (
     <>
-      <div className="hidden overflow-x-auto lg:block">
+      <div className="hidden overflow-x-auto xl:block">
         <table className="min-w-[960px] w-full border-separate border-spacing-0">
           <thead>
             <tr className="rounded-xl text-xs uppercase tracking-[0.08em]" style={{ background: 'var(--ff-dashboard-card-bottom, var(--ff-surface-soft))', color: 'var(--ff-dashboard-text-muted, var(--ff-text-500))' }}>
@@ -202,7 +202,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ entries, highlighte
         </table>
       </div>
 
-      <div className="mt-4 grid gap-3 lg:hidden">
+      <div className="mt-4 grid gap-3 xl:hidden">
         {entries.map((entry) => {
           const isSelf = highlightedUserId === entry.userId;
           const badge = getBadgeMeta(entry);
@@ -217,7 +217,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ entries, highlighte
               style={isSelf ? { background: 'rgba(139,92,246,0.08)' } : {}}
             >
               <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3">
                   <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-black text-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     {getRankLabel(entry.rank)}
                   </span>
@@ -245,8 +245,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ entries, highlighte
                 />
               </div>
 
-              <div className="mt-3 flex items-center justify-between gap-3">
-                <span className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-bold ${badge.className}`}>
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <span className={`inline-flex self-start items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-bold ${badge.className}`}>
                   <span className="material-symbols-outlined text-[15px]">{badge.icon}</span>
                   {badge.label}
                 </span>

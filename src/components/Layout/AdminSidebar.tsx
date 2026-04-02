@@ -32,8 +32,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   return (
     <aside
       className={`
-        hidden md:flex flex-col justify-between shrink-0
-        h-screen sticky top-0 z-50
+        hidden lg:flex flex-col justify-between shrink-0
+        lg:h-[100dvh] lg:sticky lg:top-0 z-50
         border-r border-violet-200/40 dark:border-violet-900/20
         bg-white dark:bg-slate-900
         transition-all duration-300 ease-out

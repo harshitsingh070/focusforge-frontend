@@ -1086,16 +1086,21 @@
     overscroll-behavior-y: contain;
   }
 
+  .page-shell {
+    min-height: 100%;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
   .page-container {
     margin: 0 auto;
     width: 100%;
     max-width: var(--ff-layout-content);
-    padding: var(--ff-layout-page-padding);
+    padding: 1rem;
   }
 
   @media (min-width: 640px) {
     .page-container {
-      padding: var(--ff-layout-page-padding);
+      padding: 1.5rem;
     }
   }
 
@@ -1702,6 +1707,18 @@
   .data-table th.text-right,
   .data-table td.text-right {
     text-align: right;
+  }
+
+  @media (max-width: 639.98px) {
+    .data-table th {
+      padding: 0.72rem 0.75rem;
+      font-size: 0.74rem;
+    }
+
+    .data-table td {
+      padding: 0.78rem 0.75rem;
+      font-size: 0.92rem;
+    }
   }
 
   .ff-navbar {

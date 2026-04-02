@@ -117,7 +117,7 @@ const LandingPage: React.FC = () => {
 
       {/* ── Navigation ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-4 sm:px-8">
+        <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-3 px-3 sm:px-8">
           <Link to="/" className="flex items-center gap-2.5 group">
             <CircularLogo size="md" />
             <span className="text-base font-bold text-white">Discipify</span>
@@ -140,7 +140,7 @@ const LandingPage: React.FC = () => {
 
       <main>
         {/* ── Hero ── */}
-        <section className="relative flex min-h-screen items-center justify-center overflow-hidden pt-16">
+        <section className="relative flex min-h-screen min-h-[100dvh] items-center justify-center overflow-hidden pt-16">
           {/* Ambient background */}
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute left-1/4 top-1/4 h-[500px] w-[500px] rounded-full bg-violet-600/20 blur-[120px]" />
@@ -148,13 +148,13 @@ const LandingPage: React.FC = () => {
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(to right, #8b5cf6 1px, transparent 1px), linear-gradient(to bottom, #8b5cf6 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
           </div>
 
-          <div className="relative z-10 mx-auto max-w-[1280px] px-4 sm:px-8 py-20 text-center">
+          <div className="relative z-10 mx-auto max-w-[1280px] px-4 py-16 text-center sm:px-8 sm:py-20">
             <div className="inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm font-medium text-violet-400 mb-8">
               <span className="h-2 w-2 rounded-full bg-violet-400 animate-pulse" />
               Gamify your discipline
             </div>
 
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-[1.1] tracking-tight mb-6">
+            <h1 className="mb-6 text-4xl font-bold leading-[1.1] tracking-tight sm:text-6xl md:text-7xl">
               Turn your discipline{' '}
               <span className="relative">
                 <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
@@ -163,15 +163,15 @@ const LandingPage: React.FC = () => {
               </span>
             </h1>
 
-            <p className="mx-auto max-w-2xl text-xl text-slate-400 leading-relaxed mb-10">
+            <p className="mx-auto mb-10 max-w-2xl text-base leading-relaxed text-slate-400 sm:text-xl">
               Track habits, earn XP, build streaks & compete on leaderboards.
               Discipify turns your discipline into an engaging game where every day counts.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <div className="mb-16 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center">
               <button
                 onClick={() => navigate('/register')}
-                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 text-base font-semibold text-white shadow-2xl shadow-violet-500/30 hover:from-violet-500 hover:to-purple-500 hover:scale-[1.02] active:scale-[0.99] transition-all duration-200"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 text-base font-semibold text-white shadow-2xl shadow-violet-500/30 transition-all duration-200 hover:from-violet-500 hover:to-purple-500 hover:scale-[1.02] active:scale-[0.99] sm:w-auto"
               >
                 Start for free
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -181,14 +181,14 @@ const LandingPage: React.FC = () => {
               </button>
               <Link
                 to="/login"
-                className="flex items-center gap-2 rounded-2xl border border-white/10 px-8 py-4 text-base font-semibold text-slate-300 hover:bg-white/5 hover:text-white hover:border-white/20 transition-all duration-200"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 px-8 py-4 text-base font-semibold text-slate-300 transition-all duration-200 hover:border-white/20 hover:bg-white/5 hover:text-white sm:w-auto"
               >
                 Sign in
               </Link>
             </div>
 
             {/* Hero stats cards */}
-            <div className="mx-auto max-w-3xl grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {stats.map((s) => (
                 <div key={s.label} className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 text-left">
                   <p className={`text-3xl font-bold bg-gradient-to-r ${s.color} bg-clip-text text-transparent`}>{s.value}</p>
@@ -241,10 +241,10 @@ const LandingPage: React.FC = () => {
         {/* ── How It Works ── */}
         <section id="how-it-works" className="relative py-24 border-t border-white/5">
           <div className="mx-auto max-w-[1280px] px-4 sm:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
               <div>
                 <p className="text-xs font-semibold text-violet-400 tracking-widest uppercase mb-3">How it works</p>
-                <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight">
+                <h2 className="mb-6 text-4xl font-bold leading-tight text-white sm:text-5xl">
                   Three steps to<br />daily momentum
                 </h2>
                 <p className="text-slate-400 text-lg mb-10">A simple, repeatable system that builds compound progress over time.</p>
@@ -267,7 +267,7 @@ const LandingPage: React.FC = () => {
               {/* Visual card */}
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-indigo-600/10 blur-3xl" />
-                <div className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm p-8 space-y-4">
+                <div className="relative space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm sm:p-8">
                   <div className="flex items-center justify-between mb-6">
                     <h4 className="text-lg font-bold text-white">Today's Progress</h4>
                     <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-400">On track</span>
@@ -309,10 +309,10 @@ const LandingPage: React.FC = () => {
             <p className="text-xs font-semibold text-violet-400 tracking-widest uppercase mb-4">Ready?</p>
             <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">Start building momentum today</h2>
             <p className="text-slate-400 text-lg mb-10 max-w-xl mx-auto">Join thousands who track daily effort and compete on transparent leaderboards.</p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center">
               <button
                 onClick={() => navigate('/register')}
-                className="flex items-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 text-base font-semibold text-white shadow-2xl shadow-violet-500/30 hover:from-violet-500 hover:to-purple-500 hover:scale-[1.02] transition-all duration-200"
+                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-4 text-base font-semibold text-white shadow-2xl shadow-violet-500/30 transition-all duration-200 hover:from-violet-500 hover:to-purple-500 hover:scale-[1.02] sm:w-auto"
               >
                 Create free account
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -320,7 +320,7 @@ const LandingPage: React.FC = () => {
                   <polyline points="12 5 19 12 12 19" />
                 </svg>
               </button>
-              <Link to="/rules" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">
+              <Link to="/rules" className="text-center text-sm font-medium text-slate-400 transition-colors hover:text-white">
                 View platform rules →
               </Link>
             </div>
@@ -331,7 +331,7 @@ const LandingPage: React.FC = () => {
       {/* ── Footer ── */}
       <footer className="border-t border-white/5 py-12">
         <div className="mx-auto max-w-[1280px] px-4 sm:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pb-8 border-b border-white/5">
+          <div className="grid grid-cols-1 gap-8 border-b border-white/5 pb-8 sm:grid-cols-2 lg:grid-cols-3">
             <div>
               <div className="flex items-center gap-2.5 mb-4">
                 <CircularLogo size="md" />
