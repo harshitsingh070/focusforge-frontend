@@ -4,39 +4,93 @@ import CircularLogo from '../ui/CircularLogo';
 
 const currentYear = new Date().getFullYear();
 
+// FocusForge/Obsidian Aurora standard icons
+const DashboardIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="7" height="7" rx="1" />
+    <rect x="14" y="3" width="7" height="7" rx="1" />
+    <rect x="3" y="14" width="7" height="7" rx="1" />
+    <rect x="14" y="14" width="7" height="7" rx="1" />
+  </svg>
+);
+
+const ChartIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="18" y1="20" x2="18" y2="10" />
+    <line x1="12" y1="20" x2="12" y2="4" />
+    <line x1="6" y1="20" x2="6" y2="14" />
+  </svg>
+);
+
+const LeaderboardIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M8 6h13" />
+    <path d="M8 12h13" />
+    <path d="M8 18h13" />
+    <line x1="3" y1="6" x2="3.01" y2="6" />
+    <line x1="3" y1="12" x2="3.01" y2="12" />
+    <line x1="3" y1="18" x2="3.01" y2="18" />
+  </svg>
+);
+
+const FlameIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z" />
+  </svg>
+);
+
+const AwardIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="6" />
+    <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+  </svg>
+);
+
+const ActivityIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+  </svg>
+);
+
 const features = [
   {
-    icon: '🎯',
+    icon: DashboardIcon,
+    theme: 'violet',
     label: 'Daily Dashboard',
     title: 'Track every active goal from one screen',
     desc: 'Monitor streak safety, completion pace, and effort logs without switching views or losing context.',
   },
   {
-    icon: '📊',
+    icon: ChartIcon,
+    theme: 'blue',
     label: 'Activity Intelligence',
     title: 'Catch streak risk before momentum drops',
     desc: 'Understand weekly rhythm, low-output windows, and completion trends so adjustments happen early.',
   },
   {
-    icon: '🏆',
+    icon: LeaderboardIcon,
+    theme: 'amber',
     label: 'Fair Leaderboards',
     title: 'Compete on consistency, not noisy activity',
     desc: 'Rankings reward meaningful progress and protect high-quality effort across goal categories.',
   },
   {
-    icon: '🔥',
+    icon: FlameIcon,
+    theme: 'orange',
     label: 'Streak Protection',
     title: 'Never lose momentum unintentionally',
     desc: 'Smart alerts and daily check-ins protect the streaks that matter most to your progress.',
   },
   {
-    icon: '🏅',
+    icon: AwardIcon,
+    theme: 'emerald',
     label: 'Milestone Badges',
     title: 'Unlock recognition as you level up',
     desc: 'Visual badges and milestone scoring keep motivation high across weeks and months.',
   },
   {
-    icon: '⚡',
+    icon: ActivityIcon,
+    theme: 'cyan',
     label: 'Instant Visibility',
     title: 'Know exactly where you stand daily',
     desc: 'One unified view for goals, rankings, and streaks — stop switching between tools.',
@@ -157,20 +211,29 @@ const LandingPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-              {features.map((f) => (
-                <div
-                  key={f.title}
-                  className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:border-violet-500/40 hover:bg-violet-500/5 hover:-translate-y-1"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
-                  <div className="relative z-10">
-                    <div className="text-2xl mb-4">{f.icon}</div>
-                    <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest mb-2">{f.label}</p>
-                    <h3 className="text-lg font-bold text-white mb-3 leading-snug">{f.title}</h3>
-                    <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
+              {features.map((f) => {
+                const { icon: Icon } = f;
+                return (
+                  <div
+                    key={f.title}
+                    className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 sm:p-8 transition-all duration-300 hover:border-violet-500/30 hover:bg-white/[0.07] hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-500/10"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-violet-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                    
+                    <div className="relative z-10">
+                      <div className={`mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-${f.theme}-600/20 to-${f.theme}-600/5 border border-${f.theme}-500/20 text-${f.theme}-400 transition-transform duration-300 group-hover:scale-110`}>
+                        <Icon />
+                      </div>
+                      
+                      <p className={`text-xs font-bold tracking-widest uppercase mb-3 text-${f.theme}-400`}>{f.label}</p>
+                      <h3 className="text-xl font-bold text-white mb-3 leading-snug">{f.title}</h3>
+                      <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
+                      
+                      <div className={`absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-${f.theme}-500 to-transparent transition-all duration-500 group-hover:w-full opacity-60`} />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
