@@ -165,6 +165,7 @@ export const enhancedLeaderboardAPI = {
         ...(category ? { category } : {}),
         ...(period ? { period } : {}),
       }),
+      headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
     }),
   getMyContext: (category?: string, period?: string) =>
     api.get('/leaderboard/v2/my-context', {
@@ -172,10 +173,12 @@ export const enhancedLeaderboardAPI = {
         ...(category ? { category } : {}),
         ...(period ? { period } : {}),
       }),
+      headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
     }),
   getCategories: () =>
     api.get('/leaderboard/v2/categories', {
       params: withTimestamp(),
+      headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
     }),
 };
 
@@ -207,7 +210,7 @@ export const adminAPI = {
 };
 
 export const diagnosticAPI = {
-  getLeaderboardData: () => api.get('/diagnostic/leaderboard-data', { params: withTimestamp() }),
+  getLeaderboardData: () => api.get('/diagnostic/leaderboard-data', { params: withTimestamp(), headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' } }),
 };
 
 export default api;
