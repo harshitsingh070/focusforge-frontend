@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { Provider, useSelector } from 'react-redux';
 import { RootState, store } from './store';
@@ -96,6 +97,7 @@ const App: React.FC = () => {
         <FeedbackProvider>
           <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
             <AnimatedRoutes />
+            <VercelAnalytics />
           </Router>
         </FeedbackProvider>
       </ThemeProvider>
